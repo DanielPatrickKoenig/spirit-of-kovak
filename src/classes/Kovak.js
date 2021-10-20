@@ -3,6 +3,9 @@ import jt from 'jstrig';
 export default class Kovak{
     constructor(){
         this.gravity = 0;
+        this.healthMax = 10;
+        this.points = 0;
+        this.health = this.healthMax;
         this.minGravity = -20;
         this.maxGravity = 40;
         this.altitude = 0;
@@ -13,6 +16,8 @@ export default class Kovak{
         this.floaters = [];
         this.floors = [new Floor(0, 0, 5000)];
         this.onUpdate = null;
+        this.shaftHeight = 10000;
+        this.gameOver = false;
         this.cycle();
     }
     cycle(){
@@ -43,6 +48,7 @@ export default class Kovak{
         if(this.onUpdate){
             this.onUpdate(this);
         }
+        this.floaters.map(item => item.descend());
         this.checkFloaters();
     }
     checkFloaters(){
@@ -52,11 +58,16 @@ export default class Kovak{
             .map(item => {
                 item.deactivate();
                 this.gravity = item.getGravityShift();
+                this.health += item.getHealthShift();
+                this.points += item.getPointShift();
                 return item;
             });
-    }
-    hardStop(){
-        this.gravity = 0;
+        if(this.health > this.healthMax){
+            this.health = this.healthMax;
+        }
+        if(this.health <= 0){
+            this.gameOver = true;
+        }
     }
     canJump () {
         const filteredFloors = this.floors.filter(item => item.didLand(this.hero, this.gravity));
@@ -79,18 +90,22 @@ export default class Kovak{
         this.floors.push(new Floor(x, y, width));
     }
     addFloater(x, y){
-        const intVal = Math.floor(Math.random()*3);
+        const intVal = Math.floor(Math.random()*7);
         switch(intVal){
-            case 0:{
-                this.floaters.push(new Booster1(x, y));
-                break;
-            }
-            case 1:{
-                this.floaters.push(new Booster2(x, y));
-                break;
-            }
+            case 0:
+            case 1:
             case 2:{
-                this.floaters.push(new Blocker(x, y));
+                this.floaters.push(new Blocker(x, y, this.shaftHeight));
+                break;
+            }
+            case 3:
+            case 4:
+            case 5:{
+                this.floaters.push(new Booster2(x, y, this.shaftHeight));
+                break;
+            }
+            case 6:{
+                this.floaters.push(new Booster1(x, y, this.shaftHeight));
                 break;
             }
         }
@@ -105,12 +120,19 @@ class Hero {
     }
 }
 class Floater{
-    constructor(x, y){
+    constructor(x, y, max){
         this.x = x;
         this.y = y;
+        this.max = max;
         this.active = true;
     }
     getGravityShift () {
+        return 0;
+    }
+    getHealthShift () {
+        return 0;
+    }
+    getPointShift () {
         return 0;
     }
     getType(){
@@ -119,11 +141,24 @@ class Floater{
     deactivate(){
         this.active = false;
     }
+    descend(){
+        this.y+=1;
+        if(this.y>0){
+            this.y = this.max * -1;
+            this.active = true;
+        }
+    }
     // gravityShift
 }
 class Booster1 extends Floater{
     getGravityShift () {
         return 15;
+    }
+    getHealthShift () {
+        return 2;
+    }
+    getPointShift () {
+        return 5;
     }
     getType(){
         return '1';
@@ -133,6 +168,9 @@ class Booster2 extends Floater{
     getGravityShift () {
         return 25;
     }
+    getPointShift () {
+        return 15;
+    }
     getType(){
         return '2';
     }
@@ -140,6 +178,9 @@ class Booster2 extends Floater{
 class Blocker extends Floater{
     getGravityShift () {
         return -5;
+    }
+    getHealthShift () {
+        return -1;
     }
     getType(){
         return '-1';

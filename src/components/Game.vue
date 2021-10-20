@@ -1,5 +1,11 @@
 <template>
   <div class="game">
+        <div
+            class="game-bg"
+            :style="{height: `${gameHeight}px`, transform: `translate(-50%, -${gameHeight - altitude}px)`}"
+        >
+
+        </div>
         <Hero
             :width="heroData.width"
             :height="heroData.height"
@@ -19,19 +25,19 @@
                 v-for="(floater, i) in floaters"
             >
                 <Booster1 
-                    v-if="floater.type==='1' && floater.active"
+                    v-if="floater.type==='1' && floater.active && displayFloater(floater)"
                     :key="i"
                     :x="floater.x"
                     :y="floater.y"
                 />
                 <Booster2 
-                    v-if="floater.type==='2' && floater.active"
+                    v-if="floater.type==='2' && floater.active && displayFloater(floater)"
                     :key="i"
                     :x="floater.x"
                     :y="floater.y"
                 />
                 <Blocker 
-                    v-if="floater.type==='-1' && floater.active"
+                    v-if="floater.type==='-1' && floater.active && displayFloater(floater)"
                     :key="i"
                     :x="floater.x"
                     :y="floater.y"
@@ -50,6 +56,19 @@
             @mouseup="isDown = false"
             @touchend="isDown = false"
         />
+        <StatHeader
+            :health="health"
+            :healthMax="healthMax" 
+            :points="points"
+        />
+        <ModalWindow
+            v-if="gameOver"
+        >
+            <p>Game Over</p>
+            <button @click="playAgain">
+                Play Again
+            </button>
+        </ModalWindow>
   </div>
 </template>
 
@@ -59,6 +78,8 @@ import Floor from './Floor.vue';
 import Booster1 from './Booster1.vue';
 import Booster2 from './Booster2.vue';
 import Blocker from './Blocker.vue';
+import ModalWindow from './ModalWindow.vue';
+import StatHeader from './StatHeader.vue';
 import Kovak from '../classes/Kovak.js';
 const kovak = new Kovak();
 export default {
@@ -67,7 +88,9 @@ export default {
         Floor,
         Booster1,
         Booster2,
-        Blocker
+        Blocker,
+        ModalWindow,
+        StatHeader
     },
     data () {
         return {
@@ -76,7 +99,12 @@ export default {
             floaters: [],
             altitude: 0,
             xLag: 0,
-            isDown: false
+            isDown: false,
+            gameOver: false,
+            health: 0,
+            healthMax: 0,
+            points: 0,
+            gameHeight: 0
         };
     },
     methods: {
@@ -89,22 +117,38 @@ export default {
         },
         doLat(e){
             // console.log(this.processEvent(e).clientX);
+            e.preventDefault();
             if(this.isDown){
                 this.xLag = this.processEvent(e).clientX - (this.$refs.toucher.getBoundingClientRect().width/2);
                 kovak.hero.x += (this.xLag - kovak.hero.x) / 8;
             }
             
+        },
+        playAgain(){
+            window.location.reload();
         }
 
     },
+    computed: {
+        displayFloater(){
+            return floater => {
+                return Math.abs(floater.y - this.heroData.y) < 400;
+            }
+        }
+    },
     mounted () {
-        [...Array(200).keys()].map((item, i) => {
-            const xPosition = (i%2) === 1 ? 100 : -100;
-            kovak.addFloor(xPosition, -50 * (i + 1), 30);
+        this.gameHeight = kovak.shaftHeight;
+        const floorCount = 60;
+        const floaterCount = 350;
+        [...Array(floorCount).keys()].map((item, i) => {
+            const xPosition = Math.random() > .5 ? 185 : -185;
+            const yPosition = ((kovak.shaftHeight / floorCount) * -1) * (i + 1);
+            kovak.addFloor(xPosition, yPosition, 80);
         });
-        [...Array(500).keys()].map((item, i) => {
-            const xPosition = ((Math.random() - .5) * 2) * 200;
-            kovak.addFloater(xPosition, -20 * (i + 1));
+        [...Array(floaterCount).keys()].map((item, i) => {
+            const xPosition = ((Math.random() - .5) * 2) * 120;
+            const yPosition = ((kovak.shaftHeight / floaterCount) * -1) * (i + 1);
+            kovak.addFloater(xPosition, yPosition);
         });
         kovak.setUpdateHandler((k) => {
             this.heroData = {
@@ -129,7 +173,11 @@ export default {
                     type: item.getType()
                 }
             });
+            this.health = k.health;
+            this.healthMax = k.healthMax;
+            this.points = k.points;
             this.altitude = k.altitude;
+            this.gameOver = k.gameOver;
             
         });
     }

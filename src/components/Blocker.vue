@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import BaseFloater from './BaseGameElement.js';
+import BaseGameElement from './BaseGameElement.js';
 export default {
-    extends: BaseFloater
+    extends: BaseGameElement
 }
 </script>
 

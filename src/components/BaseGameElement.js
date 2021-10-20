@@ -3,8 +3,7 @@ export default {
         width: Number,
         height: Number,
         x: Number,
-        y: Number,
-        altitude: Number
+        y: Number
     },
     computed: {
         dimensions(){
