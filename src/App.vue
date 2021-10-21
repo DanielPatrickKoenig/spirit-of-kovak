@@ -56,7 +56,7 @@ p, h1, h2, h3{
       background-repeat: no-repeat;
       background-size: contain;
       background-position: bottom center;
-      background-image: url('/bard.png');
+      background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/bard.png');
     }
   }
   &.floor{
@@ -64,7 +64,7 @@ p, h1, h2, h3{
       transform: translate(-50%, 0);
     }
     > div{
-      background-image: url('/floor.png');
+      background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/floor.png');
       background-size: contain;
     }
   }
@@ -104,18 +104,18 @@ p, h1, h2, h3{
   
   &.booster-1{
     // &::after{
-      background-image: url('/heart.png');
+      background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/heart.png');
       
     // }
   }
   &.booster-2{
     // &::after{
-      background-image: url('/note.png');
+      background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/note.png');
     // }
   }
   &.blocker{
     // &::after{
-      background-image: url('/spider.png');
+      background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/spider.png');
     // }
   }
 }
@@ -178,7 +178,7 @@ p, h1, h2, h3{
   }
 }
 .game-bg{
-  background-image: url('/dirt_row.png');
+  background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/dirt_row.png');
   opacity: .7;
   width: 800px;
 }
