@@ -50,12 +50,17 @@
         <div
             ref="toucher"
             class="toucher"
+            @keydown.space="onSpace"
+            @keydown.left="keys.left = true"
+            @keydown.right="keys.right = true"
+            @keyup.left="keys.left = false"
+            @keyup.right="keys.right = false"
             @mousedown="doJump"
             @touchstart="doJump"
-            @mousemove="doLat"
             @touchmove="doLat"
             @mouseup="isDown = false"
             @touchend="isDown = false"
+            tabindex="-1"
         >
             <div>
                 <p>
@@ -117,7 +122,11 @@ export default {
             healthMax: 0,
             points: 0,
             gameHeight: 0,
-            reversed: false
+            reversed: false,
+            keys: {
+                left: false,
+                right: false
+            },
         };
     },
     methods: {
@@ -140,6 +149,19 @@ export default {
         },
         playAgain(){
             window.location.reload();
+        },
+        onSpace (){
+            kovak.jump();
+        },
+        keyLat(){
+            if(this.keys.left){
+                this.xHero += -4;
+                kovak.hero.lateral(this.xHero);
+            }
+            if(this.keys.right){
+                this.xHero += 4;
+                kovak.hero.lateral(this.xHero);
+            }
         }
 
     },
@@ -151,20 +173,22 @@ export default {
         }
     },
     mounted () {
+        this.$refs.toucher.focus();
         this.gameHeight = kovak.shaftHeight;
         const floorCount = 60;
         const floaterCount = 350;
-        [...Array(floorCount).keys()].map((item, i) => {
+        [...Array(floorCount).keys()].map((i) => {
             const xPosition = Math.random() > .5 ? 185 : -185;
             const yPosition = ((kovak.shaftHeight / floorCount) * -1) * (i + 1);
             kovak.addFloor(xPosition, yPosition, 80);
         });
-        [...Array(floaterCount).keys()].map((item, i) => {
+        [...Array(floaterCount).keys()].map((i) => {
             const xPosition = ((Math.random() - .5) * 2) * 120;
             const yPosition = ((kovak.shaftHeight / floaterCount) * -1) * (i + 1);
             kovak.addFloater(xPosition, yPosition);
         });
         kovak.setUpdateHandler((k) => {
+            this.keyLat();
             this.heroData = {
                 x: k.hero.x,
                 y: k.hero.y,

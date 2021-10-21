@@ -90,6 +90,9 @@ p, h1, h2, h3{
     > p{
       font-size: 20px;
     }
+    @media only screen and (min-width: 768px) {
+      display: none;
+    }
   }
 }
 .floater{
