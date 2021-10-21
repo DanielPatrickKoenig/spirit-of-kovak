@@ -12,7 +12,7 @@ export default class Kovak{
         this.dampening = .5;
         this.currentCycle = 0;
         this.running = true;
-        this.hero = new Hero(0, 0, 10, 20);
+        this.hero = new Hero(0, 0, 50, 50);
         this.floaters = [];
         this.floors = [new Floor(0, 0, 5000)];
         this.onUpdate = null;
@@ -84,7 +84,7 @@ export default class Kovak{
     setUpdateHandler(handler){
         this.onUpdate = handler;
         this.onUpdate(this);
-        this.jump();
+        // this.jump();
     }
     addFloor(x, y, width){
         this.floors.push(new Floor(x, y, width));
@@ -117,6 +117,19 @@ class Hero {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.minX = -180;
+        this.maxX = 180;
+        this.reversed = false;
+    }
+    lateral(value){
+        this.reversed = value < this.x;
+        this.x = value;
+        if(this.x > this.maxX){
+            this.x = this.maxX;
+        }
+        if(this.x < this.minX){
+            this.x = this.minX;
+        }
     }
 }
 class Floater{

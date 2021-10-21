@@ -7,6 +7,7 @@
 
         </div>
         <Hero
+            :class="{ reversed }"
             :width="heroData.width"
             :height="heroData.height"
             :x="heroData.x"
@@ -55,7 +56,17 @@
             @touchmove="doLat"
             @mouseup="isDown = false"
             @touchend="isDown = false"
-        />
+        >
+            <div>
+                <p>
+                    Tap To Jump
+                </p>
+                <p>
+                    &lt; Drag sideways to move &gt;
+                </p>
+            </div>
+            
+        </div>
         <StatHeader
             :health="health"
             :healthMax="healthMax" 
@@ -99,12 +110,14 @@ export default {
             floaters: [],
             altitude: 0,
             xLag: 0,
+            xHero: 0,
             isDown: false,
             gameOver: false,
             health: 0,
             healthMax: 0,
             points: 0,
-            gameHeight: 0
+            gameHeight: 0,
+            reversed: false
         };
     },
     methods: {
@@ -120,7 +133,8 @@ export default {
             e.preventDefault();
             if(this.isDown){
                 this.xLag = this.processEvent(e).clientX - (this.$refs.toucher.getBoundingClientRect().width/2);
-                kovak.hero.x += (this.xLag - kovak.hero.x) / 8;
+                this.xHero += (this.xLag - this.xHero) / 8;
+                kovak.hero.lateral(this.xHero);
             }
             
         },
@@ -178,6 +192,7 @@ export default {
             this.points = k.points;
             this.altitude = k.altitude;
             this.gameOver = k.gameOver;
+            this.reversed = k.hero.reversed;
             
         });
     }

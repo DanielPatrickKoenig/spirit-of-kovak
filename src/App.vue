@@ -16,8 +16,10 @@ export default {
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 body{
   background-color: #000000;
+  font-family: 'MedievalSharp', cursive;
 }
 p, h1, h2, h3{
   padding: 0;
@@ -47,8 +49,14 @@ p, h1, h2, h3{
     transform: translate(-50%, -50%);
   }
   &.hero{
+    &.reversed{
+      transform: scale(-1, 1);
+    }
     > div{
-      background-color: #cc0000;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: bottom center;
+      background-image: url('/bard.png');
     }
   }
   &.floor{
@@ -64,9 +72,25 @@ p, h1, h2, h3{
 .toucher{
   position:fixed;
   top:0;
-  left:0;
+  left: 0;
   right:0;
   bottom:0;
+  > div{
+    position:absolute;
+    height: 120px;
+    left: 0;
+    right:0;
+    bottom:0;
+    background-color: #ffcc00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    pointer-events: none;
+    > p{
+      font-size: 20px;
+    }
+  }
 }
 .floater{
   background-repeat: no-repeat;
@@ -155,6 +179,7 @@ p, h1, h2, h3{
 }
 .game-bg{
   background-image: url('/dirt_row.png');
+  opacity: .7;
   width: 800px;
 }
 </style>
