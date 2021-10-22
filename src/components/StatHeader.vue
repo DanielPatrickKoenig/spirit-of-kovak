@@ -14,6 +14,12 @@
             <p class="stat-label">Points</p>
             <p class="stat-value">{{points}}</p>
         </div>
+        <a 
+            class="info"
+            @click="showInfo"
+        >
+            i
+        </a>
     </div>
 </template>
 
@@ -35,6 +41,11 @@ export default {
         points: {
             type: Number,
             required: true
+        }
+    },
+    methods: {
+        showInfo () {
+            this.$emit('show-info')
         }
     }
 }

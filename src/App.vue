@@ -17,6 +17,16 @@ export default {
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+button{
+  background-color: #000000;
+  color: #ffcc00;
+  font-family: 'MedievalSharp', cursive;
+  border: none;
+  font-size: 16px;
+  box-shadow: 0 0 0 1px #ae1212;
+  padding: 8px;
+  border-radius: 4px;
+}
 body{
   background-color: #000000;
   font-family: 'MedievalSharp', cursive;
@@ -145,6 +155,17 @@ p, h1, h2, h3{
   .stat-value{
     font-size: 16px;
   }
+  .info{
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 36px;
+    box-shadow: 0 0 0 2px #000000;
+  }
 }
 .stat-bar{
   width: 120px;
@@ -175,6 +196,8 @@ p, h1, h2, h3{
     align-items: center;
     flex-direction: column;
     width: 300px;
+    max-height: 80%;
+    overflow: auto;
     > * {
       margin: 16px;
     }
@@ -184,5 +207,73 @@ p, h1, h2, h3{
   background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/dirt_row.png');
   opacity: .7;
   width: 800px;
+}
+.instructions{
+  h2{
+    font-size: 72px;
+  }
+  p, h3{
+    margin: 4px 0;
+  }
+  .grid-col-3{
+    margin: 0 auto;
+    display: inline-grid;
+    font-size: 10px;
+    grid-template-columns: 60px 60px 60px;
+    grid-gap: 0;
+    > div{
+      height: 25px;
+      display:flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 0 1px #000000;
+      background-color: #cccccc;
+      &.grid-header{
+        position: relative;
+        font-weight: bold;
+        color: #ffffff;
+        > span{
+          position: relative;
+        }
+        &::before{
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          content: '';
+          background-color: rgba(0,0,0,.4);
+        }
+      }
+      &.dt-controls{
+        background-color: #cda401
+      }
+      &.mobile-controls{
+        background-color: #01bfcd
+      }
+    }
+  }
+  .directions-icon{
+    height: 44px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-top: 16px;
+    &.kovak{
+      background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/bard.png');
+    }
+    &.shelf{
+      background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/floor.png');
+    }
+    &.heart{
+      background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/heart.png');
+    }
+    &.note{
+      background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/note.png');
+    }
+    &.spider{
+      background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/spider.png');
+    }
+  }
 }
 </style>

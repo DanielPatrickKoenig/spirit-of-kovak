@@ -18,6 +18,7 @@ export default class Kovak{
         this.onUpdate = null;
         this.shaftHeight = 10000;
         this.gameOver = false;
+        this.paused = false;
         this.cycle();
     }
     cycle(){
@@ -31,25 +32,28 @@ export default class Kovak{
         // gsap.TweenLite.to(updater, 1, {n: 1, onComplete: this.cycle, onUpdate: this.update});
     }
     update(){
-        this.currentCycle++;
-        if(!this.canJump()){
-            this.gravity -= this.dampening;
-            this.altitude += this.gravity;
-            this.hero.y = this.altitude * -1;
-        }
-        if(this.gravity < this.minGravity){
-            this.gravity = this.minGravity;
-        }
-        if(this.gravity > this.maxGravity){
-            this.gravity = this.maxGravity;
+        if(!this.paused){
+            this.currentCycle++;
+            if(!this.canJump()){
+                this.gravity -= this.dampening;
+                this.altitude += this.gravity;
+                this.hero.y = this.altitude * -1;
+            }
+            if(this.gravity < this.minGravity){
+                this.gravity = this.minGravity;
+            }
+            if(this.gravity > this.maxGravity){
+                this.gravity = this.maxGravity;
+            }
+            
+            console.log(this.gravity);
+            if(this.onUpdate){
+                this.onUpdate(this);
+            }
+            this.floaters.map(item => item.descend());
+            this.checkFloaters();
         }
         
-        console.log(this.gravity);
-        if(this.onUpdate){
-            this.onUpdate(this);
-        }
-        this.floaters.map(item => item.descend());
-        this.checkFloaters();
     }
     checkFloaters(){
         console.log(this.floaters);
@@ -109,6 +113,12 @@ export default class Kovak{
                 break;
             }
         }
+    }
+    pause () {
+        this.paused = true;
+    }
+    continue () {
+        this.paused = false;
     }
 }
 class Hero {
