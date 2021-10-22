@@ -1,7 +1,7 @@
 <template>
   <div class="game">
         <div
-            class="game-bg"
+            class="game-bg "
             :style="{height: `${gameHeight}px`, transform: `translate(-50%, -${gameHeight - altitude}px)`}"
         >
 
@@ -64,12 +64,7 @@
             tabindex="-1"
         >
             <div>
-                <p>
-                    Tap To Jump
-                </p>
-                <p>
-                    &lt; Drag sideways to move &gt;
-                </p>
+                
             </div>
             
         </div>
@@ -79,6 +74,19 @@
             :points="points"
             @show-info="showInfo"
         />
+        <MobileTracker
+            @dragger-moved="draggerMoved"
+            @dragger-tapped="doJump"
+         >
+            <div class="action-hint">
+                <span v-if="canJump">
+                    Tap<br />to<br />Jump
+                </span>
+                <span v-else>
+                    Slide<br />&lt; to &gt;<br />Move
+                </span>
+            </div>
+        </MobileTracker>
         <ModalWindow
             v-if="gameOver"
         >
@@ -137,6 +145,7 @@ import Blocker from './Blocker.vue';
 import ModalWindow from './ModalWindow.vue';
 import StatHeader from './StatHeader.vue';
 import Kovak from '../classes/Kovak.js';
+import MobileTracker from './MobileTracker.vue';
 const localStorageKey = 'spirit-of-kovak:hasPlayedBefor';
 const kovak = new Kovak();
 export default {
@@ -147,7 +156,8 @@ export default {
         Booster2,
         Blocker,
         ModalWindow,
-        StatHeader
+        StatHeader,
+        MobileTracker
     },
     data () {
         return {
@@ -168,7 +178,8 @@ export default {
                 left: false,
                 right: false
             },
-            showingInfo: false
+            showingInfo: false,
+            canJump: true
         };
     },
     methods: {
@@ -190,6 +201,11 @@ export default {
                 kovak.hero.lateral(this.xHero);
             }
             
+        },
+        draggerMoved (position) {
+            this.xLag = position - (this.$refs.toucher.getBoundingClientRect().width/2);
+            this.xHero += (this.xLag - this.xHero) / 8;
+            kovak.hero.lateral(this.xHero);
         },
         playAgain(){
             window.location.reload();
@@ -261,6 +277,7 @@ export default {
         });
         kovak.setUpdateHandler((k) => {
             this.keyLat();
+            this.canJump = k.canJump();
             this.heroData = {
                 x: k.hero.x,
                 y: k.hero.y,

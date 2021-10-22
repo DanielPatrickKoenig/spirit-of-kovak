@@ -49,6 +49,12 @@ p, h1, h2, h3{
   position: relative;
   left: 50%;
   top: 50%;
+  >*{
+    pointer-events: none;
+    @media only screen and (min-width: 768px) {
+      display: all;
+    }
+  }
 }
 
 .game-element{
@@ -85,13 +91,17 @@ p, h1, h2, h3{
   left: 0;
   right:0;
   bottom:0;
+  pointer-events: none;
+  @media only screen and (min-width: 768px) {
+    pointer-events: all;
+  }
+
   > div{
     position:absolute;
     height: 120px;
     left: 0;
     right:0;
     bottom:0;
-    background-color: #ffcc00;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -133,6 +143,7 @@ p, h1, h2, h3{
   }
 }
 .stat-header{
+  pointer-events: all;
   position: fixed;
   width: 360px;
   max-width: 100%;
@@ -140,6 +151,7 @@ p, h1, h2, h3{
   top: 0;
   transform: translate(-50%, 0);
   background-color: #eeeeee;
+  z-index: 3;
   > *{
     margin: 8px;
   }
@@ -179,6 +191,7 @@ p, h1, h2, h3{
   }
 }
 .modal-outer{
+  pointer-events: all;
   text-align: center;
   position: fixed;
   top: 0;
@@ -274,6 +287,59 @@ p, h1, h2, h3{
     &.spider{
       background-image: url('https://danielpatrickkoenig.github.io/spirit-of-kovak/public/spider.png');
     }
+  }
+}
+$jumbButtonHeight: 0;
+.mobile-tracker{
+  @media only screen and (min-width: 768px) {
+    display: none;
+  }
+  pointer-events: all;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  bottom: $jumbButtonHeight;
+  top: 0;
+  .action-hint{
+    margin-top: 160px;
+    font-size: 16px;
+  }
+  .mobile-dragger{
+    width: 80px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, .2);
+    box-shadow: 0 0 0 rgba(255,255,255,.5);
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transform: translate(-50%, 0);
+    
+  }
+  .mobile-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .jump-button{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: $jumbButtonHeight;
+    color: #cc3300;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffcc00;
+    display: none;
   }
 }
 </style>
