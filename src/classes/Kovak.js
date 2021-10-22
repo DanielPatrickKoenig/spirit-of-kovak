@@ -46,7 +46,6 @@ export default class Kovak{
                 this.gravity = this.maxGravity;
             }
             
-            console.log(this.gravity);
             if(this.onUpdate){
                 this.onUpdate(this);
             }
@@ -56,7 +55,6 @@ export default class Kovak{
         
     }
     checkFloaters(){
-        console.log(this.floaters);
         // this.floaters.filter(item => item.x + 10);
         this.floaters.filter(item => item.active && jt.distance({x: this.hero.x, y: this.hero.y}, {x: item.x, y: item.y }) < 15)
             .map(item => {

@@ -137,6 +137,7 @@ import Blocker from './Blocker.vue';
 import ModalWindow from './ModalWindow.vue';
 import StatHeader from './StatHeader.vue';
 import Kovak from '../classes/Kovak.js';
+const localStorageKey = 'spirit-of-kovak:hasPlayedBefor';
 const kovak = new Kovak();
 export default {
     components: {
@@ -221,6 +222,7 @@ export default {
             kovak.pause();
         },
         hideInfo () {
+            localStorage.setItem(localStorageKey, 'true');
             this.showingInfo = false;
             kovak.continue();
             this.$refs.toucher.focus();
@@ -289,6 +291,10 @@ export default {
             this.reversed = k.hero.reversed;
             
         });
+        
+        if(!localStorage.getItem(localStorageKey)){
+            this.showInfo();
+        }
     }
 }
 </script>
